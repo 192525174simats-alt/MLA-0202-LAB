@@ -1,0 +1,40 @@
+# ANEESH
+
+data = [
+['Sunny','Warm','Normal','Strong','Warm','Same','Yes'],
+['Sunny','Warm','High','Strong','Warm','Same','Yes'],
+['Rainy','Cold','High','Strong','Warm','Change','No'],
+['Sunny','Warm','High','Strong','Cool','Change','Yes']
+]
+
+num_attr = len(data[0]) - 1
+
+S = ['0'] * num_attr
+G = ['?'] * num_attr
+
+for row in data:
+
+    if row[-1] == 'Yes':
+
+        for i in range(num_attr):
+
+            if S[i] == '0':
+                S[i] = row[i]
+
+            elif S[i] != row[i]:
+                S[i] = '?'
+
+    else:
+
+        for i in range(num_attr):
+
+            if S[i] != row[i]:
+                G[i] = S[i]
+            else:
+                G[i] = '?'
+
+print("Specific Hypothesis (S):")
+print(S)
+
+print("\nGeneral Hypothesis (G):")
+print(G)

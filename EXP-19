@@ -1,0 +1,53 @@
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load dataset
+data = pd.read_csv("bank_loan.csv")
+
+# Display data
+print(data.head())
+
+# Convert categorical columns into numbers
+le = LabelEncoder()
+
+categorical_columns = data.select_dtypes(
+    include=["object"]
+).columns
+
+for column in categorical_columns:
+    data[column] = le.fit_transform(data[column].astype(str))
+
+# Separate input and output
+X = data.drop("Loan_Status", axis=1)
+y = data["Loan_Status"]
+
+# Handle missing values
+X = X.fillna(X.mean())
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create Naive Bayes model
+model = GaussianNB()
+
+# Train
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluation
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Predict first test sample
+prediction = model.predict(X_test.iloc[[0]])
+
+print("Predicted Loan Status:", prediction[0])
